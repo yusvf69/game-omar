@@ -3,20 +3,36 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: GamingOS Platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: games
+    description: Game store operations
+  - name: users
+    description: User account operations
+  - name: subscriptions
+    description: Subscription plan operations
+  - name: reviews
+    description: Game review operations
+  - name: wishlist
+    description: Wishlist operations
+  - name: achievements
+    description: Achievement operations
+  - name: admin
+    description: Admin panel operations
+  - name: store
+    description: Store summary operations
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +40,628 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ── Games ──────────────────────────────────────────────────────────────────
+  /games:
+    get:
+      operationId: listGames
+      tags: [games]
+      summary: List all games
+      parameters:
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: search
+          in: query
+          schema: { type: string }
+        - name: sort
+          in: query
+          schema: { type: string, enum: [newest, top_rated, trending, price_asc, price_desc] }
+        - name: subscription_tier
+          in: query
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+        - name: offset
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: List of games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Game"
+    post:
+      operationId: createGame
+      tags: [games]
+      summary: Create a game (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+
+  /games/featured:
+    get:
+      operationId: listFeaturedGames
+      tags: [games]
+      summary: Featured games for store homepage
+      responses:
+        "200":
+          description: Featured games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Game"
+
+  /games/trending:
+    get:
+      operationId: listTrendingGames
+      tags: [games]
+      summary: Trending games
+      responses:
+        "200":
+          description: Trending games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Game"
+
+  /games/new-releases:
+    get:
+      operationId: listNewReleases
+      tags: [games]
+      summary: Newly released games
+      responses:
+        "200":
+          description: New releases
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Game"
+
+  /games/categories:
+    get:
+      operationId: listCategories
+      tags: [games]
+      summary: All game categories with counts
+      responses:
+        "200":
+          description: Categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+
+  /games/{id}:
+    get:
+      operationId: getGame
+      tags: [games]
+      summary: Get a game by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Game detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateGame
+      tags: [games]
+      summary: Update a game (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+    delete:
+      operationId: deleteGame
+      tags: [games]
+      summary: Delete a game (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Deleted
+
+  # ── Users ───────────────────────────────────────────────────────────────────
+  /users:
+    get:
+      operationId: listUsers
+      tags: [users]
+      summary: List users (admin)
+      parameters:
+        - name: search
+          in: query
+          schema: { type: string }
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+        - name: offset
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      operationId: createUser
+      tags: [users]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /users/{id}:
+    get:
+      operationId: getUser
+      tags: [users]
+      summary: Get a user profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateUser
+      tags: [users]
+      summary: Update user profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      operationId: deleteUser
+      tags: [users]
+      summary: Ban/delete user (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Deleted
+
+  /users/{id}/stats:
+    get:
+      operationId: getUserStats
+      tags: [users]
+      summary: Get user gaming stats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: User stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserStats"
+
+  # ── Subscriptions ───────────────────────────────────────────────────────────
+  /subscriptions/plans:
+    get:
+      operationId: listSubscriptionPlans
+      tags: [subscriptions]
+      summary: List all subscription plans
+      responses:
+        "200":
+          description: Subscription plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubscriptionPlan"
+
+  /subscriptions:
+    get:
+      operationId: listSubscriptions
+      tags: [subscriptions]
+      summary: List all subscriptions (admin)
+      parameters:
+        - name: plan
+          in: query
+          schema: { type: string }
+        - name: status
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Subscription"
+    post:
+      operationId: createSubscription
+      tags: [subscriptions]
+      summary: Subscribe a user to a plan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+
+  /subscriptions/{id}:
+    get:
+      operationId: getSubscription
+      tags: [subscriptions]
+      summary: Get a subscription
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Subscription
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+    patch:
+      operationId: updateSubscription
+      tags: [subscriptions]
+      summary: Update a subscription (change plan/status)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+
+  # ── Reviews ─────────────────────────────────────────────────────────────────
+  /games/{id}/reviews:
+    get:
+      operationId: listGameReviews
+      tags: [reviews]
+      summary: List reviews for a game
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Review"
+    post:
+      operationId: createReview
+      tags: [reviews]
+      summary: Submit a review for a game
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Review"
+
+  /reviews/{id}:
+    delete:
+      operationId: deleteReview
+      tags: [reviews]
+      summary: Delete a review (admin/author)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Deleted
+
+  # ── Wishlist ─────────────────────────────────────────────────────────────────
+  /users/{id}/wishlist:
+    get:
+      operationId: getWishlist
+      tags: [wishlist]
+      summary: Get user's wishlist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Wishlist
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Game"
+    post:
+      operationId: addToWishlist
+      tags: [wishlist]
+      summary: Add game to wishlist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WishlistInput"
+      responses:
+        "201":
+          description: Added
+
+  /users/{userId}/wishlist/{gameId}:
+    delete:
+      operationId: removeFromWishlist
+      tags: [wishlist]
+      summary: Remove game from wishlist
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: gameId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Removed
+
+  # ── Achievements ─────────────────────────────────────────────────────────────
+  /achievements:
+    get:
+      operationId: listAchievements
+      tags: [achievements]
+      summary: List all achievements
+      parameters:
+        - name: gameId
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Achievements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Achievement"
+    post:
+      operationId: createAchievement
+      tags: [achievements]
+      summary: Create an achievement (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AchievementInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Achievement"
+
+  /users/{id}/achievements:
+    get:
+      operationId: getUserAchievements
+      tags: [achievements]
+      summary: Get achievements unlocked by user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: User achievements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Achievement"
+
+  # ── Store summary (wow) ─────────────────────────────────────────────────────
+  /store/summary:
+    get:
+      operationId: getStoreSummary
+      tags: [store]
+      summary: Store homepage summary stats
+      responses:
+        "200":
+          description: Summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoreSummary"
+
+  # ── Admin ────────────────────────────────────────────────────────────────────
+  /admin/dashboard:
+    get:
+      operationId: getAdminDashboard
+      tags: [admin]
+      summary: Admin dashboard stats
+      responses:
+        "200":
+          description: Dashboard stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminDashboard"
+
+  /admin/revenue:
+    get:
+      operationId: getRevenueStats
+      tags: [admin]
+      summary: Revenue breakdown by plan and month
+      responses:
+        "200":
+          description: Revenue stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RevenueStats"
+
+  /admin/subscriptions/breakdown:
+    get:
+      operationId: getSubscriptionBreakdown
+      tags: [admin]
+      summary: Subscription count breakdown by plan
+      responses:
+        "200":
+          description: Breakdown
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PlanBreakdown"
+
+  /admin/top-games:
+    get:
+      operationId: getTopGames
+      tags: [admin]
+      summary: Top games by downloads and ratings
+      responses:
+        "200":
+          description: Top games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Game"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +672,304 @@ components:
       required:
         - status
 
+    Game:
+      type: object
+      required: [id, title, description, category, price, rating, downloads, coverImage, status, subscriptionTier, isFeatured, isTrending, releaseDate, createdAt]
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        description: { type: string }
+        category: { type: string }
+        price: { type: number }
+        rating: { type: number }
+        reviewCount: { type: integer }
+        downloads: { type: integer }
+        coverImage: { type: string }
+        trailerUrl: { type: ["string", "null"] }
+        screenshots:
+          type: array
+          items: { type: string }
+        developer: { type: ["string", "null"] }
+        publisher: { type: ["string", "null"] }
+        status: { type: string, enum: [active, coming_soon, removed] }
+        subscriptionTier: { type: string, enum: [free, basic, premium, vip] }
+        isFeatured: { type: boolean }
+        isTrending: { type: boolean }
+        releaseDate: { type: string, format: date }
+        tags:
+          type: array
+          items: { type: string }
+        requirements: { type: ["string", "null"] }
+        createdAt: { type: string, format: date-time }
+
+    GameInput:
+      type: object
+      required: [title, description, category, price, coverImage, subscriptionTier]
+      properties:
+        title: { type: string, minLength: 1 }
+        description: { type: string }
+        category: { type: string }
+        price: { type: number }
+        coverImage: { type: string }
+        trailerUrl: { type: string }
+        developer: { type: string }
+        publisher: { type: string }
+        subscriptionTier: { type: string, enum: [free, basic, premium, vip] }
+        isFeatured: { type: boolean }
+        isTrending: { type: boolean }
+        releaseDate: { type: string, format: date }
+        tags:
+          type: array
+          items: { type: string }
+        requirements: { type: string }
+        status: { type: string, enum: [active, coming_soon, removed] }
+
+    GameUpdate:
+      type: object
+      properties:
+        title: { type: string }
+        description: { type: string }
+        category: { type: string }
+        price: { type: number }
+        coverImage: { type: string }
+        trailerUrl: { type: string }
+        developer: { type: string }
+        publisher: { type: string }
+        subscriptionTier: { type: string, enum: [free, basic, premium, vip] }
+        isFeatured: { type: boolean }
+        isTrending: { type: boolean }
+        status: { type: string, enum: [active, coming_soon, removed] }
+        tags:
+          type: array
+          items: { type: string }
+
+    Category:
+      type: object
+      required: [name, count]
+      properties:
+        name: { type: string }
+        slug: { type: string }
+        count: { type: integer }
+        iconUrl: { type: ["string", "null"] }
+
+    User:
+      type: object
+      required: [id, username, email, level, xp, status, role, createdAt]
+      properties:
+        id: { type: integer }
+        username: { type: string }
+        email: { type: string }
+        displayName: { type: ["string", "null"] }
+        avatarUrl: { type: ["string", "null"] }
+        bio: { type: ["string", "null"] }
+        country: { type: ["string", "null"] }
+        level: { type: integer }
+        xp: { type: integer }
+        status: { type: string, enum: [active, banned, suspended] }
+        role: { type: string, enum: [user, admin, moderator] }
+        subscriptionPlan: { type: ["string", "null"] }
+        createdAt: { type: string, format: date-time }
+        lastLoginAt: { type: ["string", "null"] }
+
+    UserInput:
+      type: object
+      required: [username, email, password]
+      properties:
+        username: { type: string, minLength: 3 }
+        email: { type: string, format: email }
+        password: { type: string, minLength: 8 }
+        displayName: { type: string }
+        country: { type: string }
+
+    UserUpdate:
+      type: object
+      properties:
+        displayName: { type: string }
+        bio: { type: string }
+        avatarUrl: { type: string }
+        country: { type: string }
+        status: { type: string, enum: [active, banned, suspended] }
+        role: { type: string, enum: [user, admin, moderator] }
+
+    UserStats:
+      type: object
+      required: [userId, totalPlaytime, gamesOwned, achievementsUnlocked, reviewsWritten, level, xp]
+      properties:
+        userId: { type: integer }
+        totalPlaytime: { type: integer }
+        gamesOwned: { type: integer }
+        achievementsUnlocked: { type: integer }
+        reviewsWritten: { type: integer }
+        level: { type: integer }
+        xp: { type: integer }
+        xpToNextLevel: { type: integer }
+        wishlistCount: { type: integer }
+
+    SubscriptionPlan:
+      type: object
+      required: [id, name, slug, monthlyPrice, yearlyPrice, features, gamesAccess]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        slug: { type: string, enum: [free, basic, premium, vip] }
+        monthlyPrice: { type: number }
+        yearlyPrice: { type: number }
+        features:
+          type: array
+          items: { type: string }
+        gamesAccess: { type: string }
+        adsEnabled: { type: boolean }
+        earlyAccess: { type: boolean }
+        prioritySupport: { type: boolean }
+        color: { type: string }
+
+    Subscription:
+      type: object
+      required: [id, userId, plan, status, billingCycle, startDate, createdAt]
+      properties:
+        id: { type: integer }
+        userId: { type: integer }
+        username: { type: ["string", "null"] }
+        plan: { type: string, enum: [free, basic, premium, vip] }
+        status: { type: string, enum: [active, cancelled, expired, trial] }
+        billingCycle: { type: string, enum: [monthly, quarterly, yearly] }
+        price: { type: number }
+        startDate: { type: string, format: date }
+        endDate: { type: ["string", "null"] }
+        createdAt: { type: string, format: date-time }
+
+    SubscriptionInput:
+      type: object
+      required: [userId, plan, billingCycle]
+      properties:
+        userId: { type: integer }
+        plan: { type: string, enum: [free, basic, premium, vip] }
+        billingCycle: { type: string, enum: [monthly, quarterly, yearly] }
+
+    SubscriptionUpdate:
+      type: object
+      properties:
+        plan: { type: string, enum: [free, basic, premium, vip] }
+        status: { type: string, enum: [active, cancelled, expired, trial] }
+        billingCycle: { type: string, enum: [monthly, quarterly, yearly] }
+        endDate: { type: string, format: date }
+
+    Review:
+      type: object
+      required: [id, gameId, userId, username, rating, content, createdAt]
+      properties:
+        id: { type: integer }
+        gameId: { type: integer }
+        userId: { type: integer }
+        username: { type: string }
+        avatarUrl: { type: ["string", "null"] }
+        rating: { type: integer }
+        content: { type: string }
+        helpful: { type: integer }
+        createdAt: { type: string, format: date-time }
+
+    ReviewInput:
+      type: object
+      required: [userId, rating, content]
+      properties:
+        userId: { type: integer }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        content: { type: string, minLength: 10 }
+
+    WishlistInput:
+      type: object
+      required: [gameId]
+      properties:
+        gameId: { type: integer }
+
+    Achievement:
+      type: object
+      required: [id, name, description, xpReward, rarity]
+      properties:
+        id: { type: integer }
+        gameId: { type: ["integer", "null"] }
+        gameName: { type: ["string", "null"] }
+        name: { type: string }
+        description: { type: string }
+        iconUrl: { type: ["string", "null"] }
+        xpReward: { type: integer }
+        rarity: { type: string, enum: [common, rare, epic, legendary] }
+        unlockedAt: { type: ["string", "null"] }
+
+    AchievementInput:
+      type: object
+      required: [name, description, xpReward, rarity]
+      properties:
+        gameId: { type: integer }
+        name: { type: string, minLength: 1 }
+        description: { type: string }
+        iconUrl: { type: string }
+        xpReward: { type: integer }
+        rarity: { type: string, enum: [common, rare, epic, legendary] }
+
+    StoreSummary:
+      type: object
+      required: [totalGames, totalUsers, activeSubscribers, categories]
+      properties:
+        totalGames: { type: integer }
+        totalUsers: { type: integer }
+        activeSubscribers: { type: integer }
+        categories: { type: integer }
+        newReleasesCount: { type: integer }
+        averageRating: { type: number }
+
+    AdminDashboard:
+      type: object
+      required: [totalUsers, totalGames, totalRevenue, activeSubscriptions, newUsersToday, downloads]
+      properties:
+        totalUsers: { type: integer }
+        totalGames: { type: integer }
+        totalRevenue: { type: number }
+        activeSubscriptions: { type: integer }
+        newUsersToday: { type: integer }
+        newUsersThisWeek: { type: integer }
+        downloads: { type: integer }
+        bannedUsers: { type: integer }
+        pendingReviews: { type: integer }
+        churnRate: { type: number }
+
+    RevenueStats:
+      type: object
+      required: [totalRevenue, monthlyRevenue, byPlan]
+      properties:
+        totalRevenue: { type: number }
+        monthlyRevenue: { type: number }
+        yearlyRevenue: { type: number }
+        byPlan:
+          type: array
+          items:
+            $ref: "#/components/schemas/PlanRevenue"
+        recentMonths:
+          type: array
+          items:
+            $ref: "#/components/schemas/MonthlyRevenue"
+
+    PlanRevenue:
+      type: object
+      required: [plan, revenue, subscribers]
+      properties:
+        plan: { type: string }
+        revenue: { type: number }
+        subscribers: { type: integer }
+
+    MonthlyRevenue:
+      type: object
+      required: [month, revenue, newSubscribers]
+      properties:
+        month: { type: string }
+        revenue: { type: number }
+        newSubscribers: { type: integer }
+
+    PlanBreakdown:
+      type: object
+      required: [plan, count, percentage]
+      properties:
+        plan: { type: string }
+        count: { type: integer }
+        percentage: { type: number }
+        color: { type: string }

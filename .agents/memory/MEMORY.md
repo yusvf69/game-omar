@@ -1,0 +1,4 @@
+- [Orval mutation shapes](orval-mutation-shapes.md) — mutations use flat `{ id, data }` not `{ params: { id }, data }`.
+- [Radix Select empty values](radix-select-empty.md) — Select.Item value cannot be empty string; use sentinel like `"__all__"`.
+- [Drizzle numeric casting](drizzle-numeric.md) — numeric/decimal columns come back as strings; always call Number() on price/rating.
+- [PostgreSQL text array seeding](pg-text-array-seeding.md) — use `{"item1","item2"}` syntax with `::text[]` cast, not JSON.stringify.

@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "GamingOS Platform"
+version = "1.0.0"
+id = "artifacts/gaming-os"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18317
+
+[services.development]
+run = "pnpm --filter @workspace/gaming-os run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/gaming-os", "run", "build" ]
+publicDir = "artifacts/gaming-os/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18317"
+BASE_PATH = "/"
