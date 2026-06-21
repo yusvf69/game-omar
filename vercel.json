@@ -1,6 +1,6 @@
 {
   "outputDirectory": "artifacts/gaming-os/dist/public",
   "rewrites": [
-    { "source": "/((?!api).*)", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
