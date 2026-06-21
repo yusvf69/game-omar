@@ -7,7 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
-const DEMO_USER_ID = 1;
+const DEMO_USER_ID = 8;
 
 const tierColors: Record<string, string> = {
   free: "text-gray-400",

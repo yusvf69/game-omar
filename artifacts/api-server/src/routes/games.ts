@@ -57,9 +57,12 @@ router.post("/games", async (req, res) => {
     res.status(400).json({ error: "Invalid body", details: body.error.issues });
     return;
   }
+  const { price: priceVal, releaseDate: releaseDateVal, ...restInsert } = body.data;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [game] = await db.insert(gamesTable).values({
-    ...body.data,
-    releaseDate: body.data.releaseDate ?? new Date().toISOString().split("T")[0],
+    ...(restInsert as any),
+    price: String(priceVal ?? 0),
+    releaseDate: releaseDateVal ?? new Date().toISOString().split("T")[0],
   }).returning();
   res.status(201).json(toGame(game));
 });
@@ -106,7 +109,10 @@ router.patch("/games/:id", async (req, res) => {
   const params = UpdateGameParams.safeParse({ id: Number(req.params.id) });
   const body = UpdateGameBody.safeParse(req.body);
   if (!params.success || !body.success) { res.status(400).json({ error: "Invalid input" }); return; }
-  const [game] = await db.update(gamesTable).set(body.data).where(eq(gamesTable.id, params.data.id)).returning();
+  const { price: priceUpdate, ...restUpdate } = body.data;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateData: any = { ...restUpdate, ...(priceUpdate !== undefined ? { price: String(priceUpdate) } : {}) };
+  const [game] = await db.update(gamesTable).set(updateData).where(eq(gamesTable.id, params.data.id)).returning();
   if (!game) { res.status(404).json({ error: "Not found" }); return; }
   res.json(toGame(game));
 });

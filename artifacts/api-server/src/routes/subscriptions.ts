@@ -94,7 +94,9 @@ router.patch("/subscriptions/:id", async (req, res) => {
   const params = UpdateSubscriptionParams.safeParse({ id: Number(req.params.id) });
   const body = UpdateSubscriptionBody.safeParse(req.body);
   if (!params.success || !body.success) { res.status(400).json({ error: "Invalid input" }); return; }
-  const [sub] = await db.update(subscriptionsTable).set(body.data).where(eq(subscriptionsTable.id, params.data.id)).returning();
+  const { endDate, ...rest } = body.data;
+  const updateData = { ...rest, ...(endDate !== undefined ? { endDate: endDate instanceof Date ? endDate.toISOString().split("T")[0] : endDate } : {}) };
+  const [sub] = await db.update(subscriptionsTable).set(updateData).where(eq(subscriptionsTable.id, params.data.id)).returning();
   if (!sub) { res.status(404).json({ error: "Not found" }); return; }
   res.json({ ...sub, price: Number(sub.price) });
 });

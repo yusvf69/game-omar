@@ -7,6 +7,15 @@ import reviewsRouter from "./reviews";
 import wishlistRouter from "./wishlist";
 import achievementsRouter from "./achievements";
 import storeRouter from "./store";
+import marketplaceRouter from "./marketplace";
+import tournamentsRouter from "./tournaments";
+import socialRouter from "./social";
+import searchRouter from "./search";
+import developerRouter from "./developer";
+import voiceRouter from "./voice";
+import notificationsRouter from "./notifications";
+import guildsRouter from "./guilds";
+import partiesRouter from "./parties";
 
 const router: IRouter = Router();
 
@@ -18,5 +27,14 @@ router.use(reviewsRouter);
 router.use(wishlistRouter);
 router.use(achievementsRouter);
 router.use(storeRouter);
+router.use(marketplaceRouter);
+router.use(tournamentsRouter);
+router.use(socialRouter);
+router.use(searchRouter);
+router.use(developerRouter);
+router.use(voiceRouter);
+router.use(notificationsRouter);
+router.use(guildsRouter);
+router.use(partiesRouter);
 
 export default router;

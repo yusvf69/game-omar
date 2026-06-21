@@ -82,51 +82,53 @@
   --text-7xl: 4.5rem;
   --text-7xl--line-height: 1;
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 4px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* DARK GAMING THEME */
+/* APPLE DARK GAMING THEME */
 :root {
   --button-outline: rgba(255,255,255, .10);
   --badge-outline: rgba(255,255,255, .05);
-  --opaque-button-border-intensity: 9;
+  --opaque-button-border-intensity: 8;
   --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
+  --elevate-2: rgba(255,255,255, .08);
 
-  /* Deep near-black with blue-purple undertone */
-  --background: 222 24% 7%;
-  --foreground: 210 40% 96%;
-  --border: 217 19% 18%;
+  /* True black background — Apple-style */
+  --background: 0 0% 0%;
+  --foreground: 0 0% 96%;
+  --border: 0 0% 14%;
 
-  --card: 222 24% 10%;
-  --card-foreground: 210 40% 96%;
-  --card-border: 217 19% 20%;
+  /* #1C1C1E cards */
+  --card: 240 2% 12%;
+  --card-foreground: 0 0% 96%;
+  --card-border: 0 0% 18%;
 
-  --sidebar: 222 28% 6%;
-  --sidebar-foreground: 210 30% 85%;
-  --sidebar-border: 217 19% 14%;
+  /* Sidebar slightly raised from black */
+  --sidebar: 0 0% 5%;
+  --sidebar-foreground: 0 0% 80%;
+  --sidebar-border: 0 0% 11%;
   --sidebar-primary: 221 90% 60%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 222 24% 14%;
-  --sidebar-accent-foreground: 210 40% 90%;
+  --sidebar-accent: 0 0% 13%;
+  --sidebar-accent-foreground: 0 0% 90%;
   --sidebar-ring: 221 90% 60%;
 
-  --popover: 222 24% 10%;
-  --popover-foreground: 210 40% 96%;
-  --popover-border: 217 19% 20%;
+  --popover: 240 2% 12%;
+  --popover-foreground: 0 0% 96%;
+  --popover-border: 0 0% 18%;
 
   /* Electric blue primary */
   --primary: 221 90% 60%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 222 24% 16%;
-  --secondary-foreground: 210 40% 90%;
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 0 0% 88%;
 
-  --muted: 222 24% 14%;
-  --muted-foreground: 215 20% 55%;
+  --muted: 0 0% 13%;
+  --muted-foreground: 0 0% 50%;
 
   --accent: 262 80% 60%;
   --accent-foreground: 0 0% 100%;
@@ -134,7 +136,7 @@
   --destructive: 0 72% 55%;
   --destructive-foreground: 0 0% 100%;
 
-  --input: 217 19% 22%;
+  --input: 0 0% 17%;
   --ring: 221 90% 60%;
 
   --chart-1: 221 90% 60%;
@@ -143,19 +145,22 @@
   --chart-4: 38 92% 55%;
   --chart-5: 0 72% 55%;
 
-  --app-font-sans: 'Inter', sans-serif;
+  /* SF Pro font stack — falls back to Inter */
+  --app-font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', sans-serif;
   --app-font-serif: Georgia, serif;
-  --app-font-mono: Menlo, monospace;
-  --radius: .625rem;
+  --app-font-mono: 'SF Mono', 'Fira Code', Menlo, monospace;
 
-  --shadow-2xs: 0px 1px 2px 0px rgba(0,0,0,0.4);
-  --shadow-xs: 0px 2px 4px 0px rgba(0,0,0,0.4);
-  --shadow-sm: 0px 2px 4px 0px rgba(0,0,0,0.4), 0px 1px 2px -1px rgba(0,0,0,0.4);
-  --shadow: 0px 4px 8px 0px rgba(0,0,0,0.5), 0px 2px 4px -1px rgba(0,0,0,0.4);
-  --shadow-md: 0px 6px 12px 0px rgba(0,0,0,0.5), 0px 3px 6px -1px rgba(0,0,0,0.4);
-  --shadow-lg: 0px 10px 20px 0px rgba(0,0,0,0.5), 0px 5px 10px -2px rgba(0,0,0,0.4);
-  --shadow-xl: 0px 16px 32px 0px rgba(0,0,0,0.6), 0px 8px 16px -4px rgba(0,0,0,0.4);
-  --shadow-2xl: 0px 24px 48px 0px rgba(0,0,0,0.6);
+  /* 20px cards */
+  --radius: 1.25rem;
+
+  --shadow-2xs: 0px 1px 2px 0px rgba(0,0,0,0.6);
+  --shadow-xs: 0px 2px 4px 0px rgba(0,0,0,0.6);
+  --shadow-sm: 0px 2px 4px 0px rgba(0,0,0,0.6), 0px 1px 2px -1px rgba(0,0,0,0.5);
+  --shadow: 0px 4px 8px 0px rgba(0,0,0,0.7), 0px 2px 4px -1px rgba(0,0,0,0.5);
+  --shadow-md: 0px 6px 12px 0px rgba(0,0,0,0.7), 0px 3px 6px -1px rgba(0,0,0,0.5);
+  --shadow-lg: 0px 10px 24px 0px rgba(0,0,0,0.7), 0px 5px 10px -2px rgba(0,0,0,0.5);
+  --shadow-xl: 0px 20px 40px 0px rgba(0,0,0,0.8), 0px 8px 16px -4px rgba(0,0,0,0.5);
+  --shadow-2xl: 0px 32px 64px 0px rgba(0,0,0,0.8);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 
@@ -185,28 +190,33 @@
   input[type="search"]::-webkit-search-cancel-button { @apply hidden; }
 
   .game-card-hover {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
   }
   .game-card-hover:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px hsl(var(--primary) / 0.3);
+    transform: translateY(-5px) scale(1.025);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.7), 0 0 0 1px hsl(var(--primary) / 0.35);
   }
 
   .glow-primary {
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.4);
+    box-shadow: 0 0 24px hsl(var(--primary) / 0.45);
   }
 
-  .tier-free { color: #9ca3af; }
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .safe-area-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 0.25rem); }
+    .safe-area-top { padding-top: env(safe-area-inset-bottom); }
+  }
+
+  .tier-free { color: #8e8e93; }
   .tier-basic { color: #60a5fa; }
   .tier-premium { color: #a78bfa; }
   .tier-vip { color: #fbbf24; }
 
-  .rarity-common { color: #9ca3af; }
+  .rarity-common { color: #8e8e93; }
   .rarity-rare { color: #60a5fa; }
   .rarity-epic { color: #a78bfa; }
-  .rarity-legendary { color: #f97316; text-shadow: 0 0 10px rgba(249, 115, 22, 0.5); }
+  .rarity-legendary { color: #f97316; text-shadow: 0 0 12px rgba(249, 115, 22, 0.55); }
 
-  .font-display { font-family: 'Rajdhani', sans-serif; }
+  .font-display { font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif; }
 
   .no-default-hover-elevate {}
   .no-default-active-elevate {}
@@ -252,4 +262,17 @@
   .border.active-elevate:not(.no-active-interaction-elevate)::after,
   .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
   .border.active-elevate-2:not(.no-active-interaction-elevate)::after { inset: -1px; }
+
+  /* Apple-style glass effect for overlays */
+  .glass {
+    background: rgba(28, 28, 30, 0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  /* Subtle gradient separator */
+  .gradient-sep {
+    background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
+    height: 1px;
+  }
 }

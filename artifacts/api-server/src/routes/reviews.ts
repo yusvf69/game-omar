@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { db } from "@workspace/db";
 import { reviewsTable, usersTable, gamesTable } from "@workspace/db";
-import { eq, avg, desc } from "drizzle-orm";
+import { eq, avg, desc, count } from "drizzle-orm";
 import {
   ListGameReviewsParams,
   CreateReviewParams,
@@ -45,14 +45,17 @@ router.post("/games/:id/reviews", async (req, res) => {
   }).returning();
 
   // Update game rating
-  const result = await db.select({ avg: avg(reviewsTable.rating), count: reviewsTable.id })
+  const avgResult = await db.select({ avg: avg(reviewsTable.rating) })
     .from(reviewsTable)
     .where(eq(reviewsTable.gameId, params.data.id));
-  if (result[0]) {
-    const newRating = Number(result[0].avg ?? 0);
-    const allReviews = await db.select().from(reviewsTable).where(eq(reviewsTable.gameId, params.data.id));
+  const countResult = await db.select({ count: count(reviewsTable.id) })
+    .from(reviewsTable)
+    .where(eq(reviewsTable.gameId, params.data.id));
+  if (avgResult[0]) {
+    const newRating = Number(avgResult[0].avg ?? 0);
+    const reviewCount = Number(countResult[0]?.count ?? 0);
     await db.update(gamesTable)
-      .set({ rating: newRating.toFixed(2), reviewCount: allReviews.length })
+      .set({ rating: newRating.toFixed(2), reviewCount })
       .where(eq(gamesTable.id, params.data.id));
   }
 

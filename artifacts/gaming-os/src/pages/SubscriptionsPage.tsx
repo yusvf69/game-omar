@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 
-const DEMO_USER_ID = 1;
+const DEMO_USER_ID = 8;
 
 const tierIcons: Record<string, React.ElementType> = {
   free: Shield,
