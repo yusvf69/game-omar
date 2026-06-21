@@ -1,7 +1,11 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
 async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, options);
-  if (!res.ok) throw new Error(`API ${options?.method ?? "GET"} ${url} failed: ${res.status}`);
+  if (!res.ok) {
+    let body = "";
+    try { body = await res.text(); } catch {}
+    throw new Error(`API ${options?.method ?? "GET"} ${url} failed: ${res.status}${body ? ` — ${body}` : ""}`);
+  }
   return res.json();
 }
 

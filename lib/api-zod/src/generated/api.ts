@@ -309,6 +309,7 @@ export const CreateUserBody = zod.object({
   "email": zod.string().email(),
   "password": zod.string().min(createUserBodyPasswordMin),
   "displayName": zod.string().optional(),
+  "avatarUrl": zod.string().optional(),
   "country": zod.string().optional()
 })
 

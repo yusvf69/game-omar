@@ -185,6 +185,7 @@ export interface UserInput {
   /** @minLength 8 */
   password: string;
   displayName?: string;
+  avatarUrl?: string;
   country?: string;
 }
 

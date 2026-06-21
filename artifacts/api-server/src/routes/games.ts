@@ -98,11 +98,16 @@ router.get("/games/categories", async (_req, res) => {
 });
 
 router.get("/games/:id", async (req, res) => {
-  const params = GetGameParams.safeParse({ id: Number(req.params.id) });
-  if (!params.success) { res.status(400).json({ error: "Invalid id" }); return; }
-  const [game] = await db.select().from(gamesTable).where(eq(gamesTable.id, params.data.id));
-  if (!game) { res.status(404).json({ error: "Not found" }); return; }
-  res.json(toGame(game));
+  try {
+    const params = GetGameParams.safeParse({ id: Number(req.params.id) });
+    if (!params.success) { res.status(400).json({ error: "Invalid id" }); return; }
+    const [game] = await db.select().from(gamesTable).where(eq(gamesTable.id, params.data.id));
+    if (!game) { res.status(404).json({ error: "Not found" }); return; }
+    res.json(toGame(game));
+  } catch (err) {
+    console.error("Error fetching game:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 router.patch("/games/:id", async (req, res) => {

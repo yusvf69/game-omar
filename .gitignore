@@ -50,3 +50,5 @@ Thumbs.db
 .env
 node_modules/
 dist/
+artifacts/gaming-os/public/games/
+artifacts/gaming-os/dist/

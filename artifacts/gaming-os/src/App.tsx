@@ -11,8 +11,8 @@ import RegisterPage from "@/pages/RegisterPage";
 import NotFound from "@/pages/not-found";
 
 const OnboardingPage = lazy(() => import("@/pages/OnboardingPage"));
-const GamesPage = lazy(() => import("@/pages/GamesPage"));
-const GameDetailPage = lazy(() => import("@/pages/GameDetailPage"));
+const GamesHub = lazy(() => import("@/pages/GamesHub"));
+const GamePlayPage = lazy(() => import("@/pages/GamePlayPage"));
 const SubscriptionsPage = lazy(() => import("@/pages/SubscriptionsPage"));
 const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
 const AchievementsPage = lazy(() => import("@/pages/AchievementsPage"));
@@ -35,6 +35,16 @@ const AdminGamesPage = lazy(() => import("@/pages/AdminGamesPage"));
 const AdminUsersPage = lazy(() => import("@/pages/AdminUsersPage"));
 const AdminSubscriptionsPage = lazy(() => import("@/pages/AdminSubscriptionsPage"));
 const AdminReportsPage = lazy(() => import("@/pages/AdminReportsPage"));
+const AdminLiveTrackingPage = lazy(() => import("@/pages/AdminLiveTrackingPage"));
+const AdminFinancialPage = lazy(() => import("@/pages/AdminFinancialPage"));
+const AdminModerationPage = lazy(() => import("@/pages/AdminModerationPage"));
+const AdminFraudPage = lazy(() => import("@/pages/AdminFraudPage"));
+const AdminServerOpsPage = lazy(() => import("@/pages/AdminServerOpsPage"));
+const AdminRootPanelPage = lazy(() => import("@/pages/AdminRootPanelPage"));
+const AdminWarRoomPage = lazy(() => import("@/pages/AdminWarRoomPage"));
+const AdminNotificationsPage = lazy(() => import("@/pages/AdminNotificationsPage"));
+const AdminBusinessIntelligencePage = lazy(() => import("@/pages/AdminBusinessIntelligencePage"));
+const AdminFeaturedSystemPage = lazy(() => import("@/pages/AdminFeaturedSystemPage"));
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
@@ -71,8 +81,8 @@ function AppRoutes() {
   return (
     <Switch>
       <Route path="/" component={TodayPage} />
-      <Route path="/games"><GamesPage /></Route>
-      <Route path="/games/:id"><GameDetailPage /></Route>
+<Route path="/games"><GamesHub /></Route>
+<Route path="/games/:id"><GamePlayPage /></Route>
       <Route path="/store/subscriptions"><SubscriptionsPage /></Route>
       <Route path="/profile/:id"><ProfilePage /></Route>
       <Route path="/settings"><SettingsPage /></Route>
@@ -95,6 +105,16 @@ function AppRoutes() {
       <Route path="/admin/users"><AdminUsersPage /></Route>
       <Route path="/admin/subscriptions"><AdminSubscriptionsPage /></Route>
       <Route path="/admin/reports"><AdminReportsPage /></Route>
+      <Route path="/admin/live"><AdminLiveTrackingPage /></Route>
+      <Route path="/admin/financial"><AdminFinancialPage /></Route>
+      <Route path="/admin/moderation"><AdminModerationPage /></Route>
+      <Route path="/admin/fraud"><AdminFraudPage /></Route>
+      <Route path="/admin/servers"><AdminServerOpsPage /></Route>
+      <Route path="/admin/root"><AdminRootPanelPage /></Route>
+      <Route path="/admin/war-room"><AdminWarRoomPage /></Route>
+      <Route path="/admin/notifications"><AdminNotificationsPage /></Route>
+      <Route path="/admin/ai-insights"><AdminBusinessIntelligencePage /></Route>
+      <Route path="/admin/featured"><AdminFeaturedSystemPage /></Route>
       <Route component={NotFound} />
     </Switch>
   );

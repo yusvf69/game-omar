@@ -18,7 +18,7 @@ export default function RegisterPage() {
     setError("");
     if (!username || !email || !password || !confirmPassword) { setError("Please fill in all fields"); return; }
     if (password !== confirmPassword) { setError("Passwords do not match"); return; }
-    if (password.length < 6) { setError("Password must be at least 6 characters"); return; }
+    if (password.length < 8) { setError("Password must be at least 8 characters"); return; }
     if (!email.includes("@")) { setError("Please enter a valid email"); return; }
     try {
       await register(username, email, password);

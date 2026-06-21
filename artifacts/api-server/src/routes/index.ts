@@ -16,6 +16,8 @@ import voiceRouter from "./voice";
 import notificationsRouter from "./notifications";
 import guildsRouter from "./guilds";
 import partiesRouter from "./parties";
+import adminRouter from "./admin";
+import gameProgressionRouter from "./game-progression";
 
 const router: IRouter = Router();
 
@@ -36,5 +38,7 @@ router.use(voiceRouter);
 router.use(notificationsRouter);
 router.use(guildsRouter);
 router.use(partiesRouter);
+router.use(adminRouter);
+router.use(gameProgressionRouter);
 
 export default router;

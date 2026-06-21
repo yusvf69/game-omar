@@ -5,6 +5,7 @@ import {
   ListVideo, CreditCard, ChevronLeft, ChevronRight,
   User, Zap, ShieldCheck, ShoppingBag, Swords, Search,
   Code2, Newspaper, Menu, X, FileText, LogOut, LogIn, Headphones, Bell, TrendingUp, Settings, Calendar, MessageCircle, Shield, UserPlus, Home,
+  Radio, AlertTriangle, Server, Lock, Brain, Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
@@ -36,10 +37,20 @@ function getNavItems() {
 
 const adminItems = [
   { label: "Dashboard", icon: BarChart3, href: "/admin" },
+  { label: "Featured System", icon: Star, href: "/admin/featured" },
+  { label: "Live Tracking", icon: Radio, href: "/admin/live" },
   { label: "Games", icon: Gamepad2, href: "/admin/games" },
   { label: "Users", icon: Users, href: "/admin/users" },
   { label: "Subscriptions", icon: ShieldCheck, href: "/admin/subscriptions" },
+  { label: "Financial", icon: TrendingUp, href: "/admin/financial" },
+  { label: "Moderation", icon: Shield, href: "/admin/moderation" },
+  { label: "Fraud Detection", icon: AlertTriangle, href: "/admin/fraud" },
+  { label: "Server Ops", icon: Server, href: "/admin/servers" },
+  { label: "Notifications", icon: Bell, href: "/admin/notifications" },
+  { label: "AI Insights", icon: Brain, href: "/admin/ai-insights" },
   { label: "Reports", icon: FileText, href: "/admin/reports" },
+  { label: "Root Panel", icon: Lock, href: "/admin/root" },
+  { label: "War Room", icon: Swords, href: "/admin/war-room" },
 ];
 
 const bottomNavItems = [

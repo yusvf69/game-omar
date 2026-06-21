@@ -14,6 +14,18 @@ import {
 
 const router = Router();
 
+router.get("/me", async (req, res) => {
+  const userId = Number(req.headers["x-user-id"]) || Number(req.query.userId);
+  if (!userId) { res.status(401).json({ error: "Not authenticated" }); return; }
+  const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId));
+  if (!user) { res.status(404).json({ error: "User not found" }); return; }
+  res.json(toUser(user));
+});
+
+router.post("/logout", (_req, res) => {
+  res.json({ ok: true });
+});
+
 router.get("/users", async (req, res) => {
   const query = ListUsersQueryParams.safeParse(req.query);
   if (!query.success) { res.status(400).json({ error: "Invalid query" }); return; }
@@ -33,9 +45,18 @@ router.get("/users", async (req, res) => {
 
 router.post("/users", async (req, res) => {
   const body = CreateUserBody.safeParse(req.body);
-  if (!body.success) { res.status(400).json({ error: "Invalid body" }); return; }
-  const [user] = await db.insert(usersTable).values(body.data).returning();
-  res.status(201).json(toUser(user));
+  if (!body.success) { res.status(400).json({ error: "Invalid body", details: body.error.issues.map(i => ({ path: i.path.join("."), message: i.message })) }); return; }
+  try {
+    const [user] = await db.insert(usersTable).values(body.data).returning();
+    res.status(201).json(toUser(user));
+  } catch (err: any) {
+    if (err?.code === "23505") {
+      res.status(409).json({ error: "Username or email already exists" });
+      return;
+    }
+    console.error("User creation error:", err);
+    res.status(500).json({ error: "Failed to create user" });
+  }
 });
 
 router.get("/users/:id", async (req, res) => {

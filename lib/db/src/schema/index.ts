@@ -11,3 +11,4 @@ export * from "./voice";
 export * from "./notifications";
 export * from "./guilds";
 export * from "./parties";
+export * from "./game-progression";
