@@ -83,7 +83,7 @@ export default function TodayPage() {
   const { data: newReleases = [] } = useListGames({ limit: 6, sort: "newest" });
   const { data: summary } = useGetStoreSummary();
 
-  const heroGames = featured.slice(0, 4);
+  const heroGames = Array.isArray(featured) ? featured.slice(0, 4) : [];
 
   useEffect(() => {
     if (heroGames.length === 0) return;
