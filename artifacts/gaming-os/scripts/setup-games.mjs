@@ -82,25 +82,17 @@ const GAMINGOS_WRAPPER = `(function(){
     return fetch(API+path, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).then(function(r){return r.json()});
   }
 
-  var scoreBtn = document.createElement("button");
+  var scoreBtn = document.createElement("div");
   scoreBtn.id = "gamingos-score-btn";
-  scoreBtn.innerHTML = "🏆 Submit Score";
+  scoreBtn.innerHTML = "⚡ GamingOS";
   Object.assign(scoreBtn.style, {
     position: "fixed", bottom: "16px", right: "16px", zIndex: "999999",
     background: "linear-gradient(135deg,#2563eb,#7c3aed)", color: "#fff",
     border: "none", padding: "10px 20px", borderRadius: "12px",
-    fontSize: "14px", fontWeight: "600", cursor: "pointer",
-    fontFamily: "-apple-system,sans-serif", boxShadow: "0 4px 12px rgba(37,99,235,0.4)"
+    fontSize: "14px", fontWeight: "600",
+    fontFamily: "-apple-system,sans-serif", boxShadow: "0 4px 12px rgba(37,99,235,0.4)",
+    pointerEvents: "none", opacity: "0.9"
   });
-  scoreBtn.onclick = function(){
-    var score = prompt("Enter your score:");
-    if(score!==null&&!isNaN(Number(score))&&user.id){
-      api("/leaderboard",{gameId:gameId,userId:user.id,score:Number(score)}).then(function(r){
-        scoreBtn.textContent = "🏆 Rank #"+r.rank;
-        setTimeout(function(){scoreBtn.innerHTML="🏆 Submit Score"},3000);
-      });
-    }
-  };
   document.body.appendChild(scoreBtn);
 
   window.GamingOS = {
@@ -134,23 +126,23 @@ function placeholderHTML(game) {
 <title>${game.name} - GamingOS</title>
 <style>
 body{margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#0f0f0f;color:#fff;font-family:-apple-system,sans-serif;text-align:center;padding:20px;box-sizing:border-box}
-a{color:#6cf}
-.btn{display:inline-block;margin-top:16px;padding:10px 24px;background:#2563eb;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;transition:background .2s}
-.btn:hover{background:#1d4ed8}
-.id-badge{font-size:12px;color:#666;margin-top:24px}
+.spinner{width:40px;height:40px;border:3px solid #2a2a2a;border-top-color:#2563eb;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+h1{font-size:24px;margin:0 0 8px;color:#fff}
+p{color:#999;margin:0 0 4px;line-height:1.6;font-size:14px}
+.id-badge{font-size:12px;color:#555;margin-top:24px}
 .container{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:40px;max-width:480px;width:100%}
-.game-icon{font-size:48px;margin-bottom:16px}
-h1{font-size:24px;margin:0 0 8px}
-p{color:#999;margin:0 0 4px;line-height:1.6}
+.loading-bar{width:100%;height:4px;background:#2a2a2a;border-radius:2px;overflow:hidden;margin-top:20px}
+.loading-bar-inner{width:30%;height:100%;background:linear-gradient(90deg,#2563eb,#7c3aed);border-radius:2px;animation:loading 2s ease-in-out infinite}
+@keyframes loading{0%,100%{transform:translateX(-100%)}50%{transform:translateX(350%)}}
 </style>
 </head><body>
 <div class="container">
-<div class="game-icon">🎮</div>
+<div class="spinner"></div>
 <h1>${game.name}</h1>
-<p>This game requires downloading the original repository to play.</p>
-<p style="font-size:13px;color:#666;margin-top:12px">Source code is hosted on GitHub. Click below to view and download.</p>
-<a class="btn" href="${game.repo}" target="_blank">View on GitHub →</a>
-<div class="id-badge">game: ${game.id}</div>
+<p>Loading game...</p>
+<div class="loading-bar"><div class="loading-bar-inner"></div></div>
+<div class="id-badge">${game.name}</div>
 </div>
 <script src="/games/gamingos.js"></script>
 </body></html>`;

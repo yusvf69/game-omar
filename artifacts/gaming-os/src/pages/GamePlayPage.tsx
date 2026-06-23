@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "wouter";
-import { Star, Heart, Download, ArrowLeft, Clock, Trophy, Share2, ExternalLink } from "lucide-react";
-import { GAMES, CATEGORIES } from "@/data/games";
+import { Star, Heart, ArrowLeft, Trophy } from "lucide-react";
+import { GAMES } from "@/data/games";
 import { useGameProgression } from "@/hooks/use-game-progression";
 
 export default function GamePlayPage() {
@@ -10,7 +10,6 @@ export default function GamePlayPage() {
   const prog = useGameProgression();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
-  const [score, setScore] = useState(0);
 
   useEffect(() => {
     if (game) prog.recordPlay(game.id);
@@ -34,10 +33,6 @@ export default function GamePlayPage() {
   }
 
   const categoryGames = GAMES.filter(g => g.category === game.category && g.id !== game.id).slice(0, 6);
-
-  const relatedGames = CATEGORIES.filter(c => c !== game.category).length > 0
-    ? GAMES.filter(g => g.category !== game.category && g.id !== game.id).slice(0, 4)
-    : [];
 
   const rating = prog.getRating(game.id);
   const isFav = prog.isFavorited(game.id);
@@ -74,24 +69,6 @@ export default function GamePlayPage() {
               >
                 <Heart className={`w-5 h-5 ${isFav ? "fill-red-400" : ""}`} />
               </button>
-              <a
-                href={game.download}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-                title="Download ZIP"
-              >
-                <Download className="w-5 h-5" />
-              </a>
-              <a
-                href={game.repo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-                title="View on GitHub"
-              >
-                <ExternalLink className="w-5 h-5" />
-              </a>
             </div>
           </div>
         </div>
@@ -133,26 +110,12 @@ export default function GamePlayPage() {
 
             <div className="bg-card rounded-xl border border-border p-4">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold text-foreground">Score</h3>
+                <h3 className="text-sm font-semibold text-foreground">Leaderboard</h3>
                 <button onClick={() => setShowLeaderboard(!showLeaderboard)} className="text-xs text-primary hover:underline">
-                  {showLeaderboard ? "Hide" : "Leaderboard"}
+                  {showLeaderboard ? "Hide" : "Show"}
                 </button>
               </div>
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  value={score}
-                  onChange={e => setScore(Number(e.target.value))}
-                  placeholder="Enter score"
-                  className="flex-1 bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary"
-                />
-                <button
-                  onClick={() => { prog.submitScore(game.id, score); setShowLeaderboard(true); }}
-                  className="px-3 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90"
-                >
-                  Submit
-                </button>
-              </div>
+              <p className="text-xs text-muted-foreground">Scores are tracked automatically while you play.</p>
             </div>
 
             {showLeaderboard && (
@@ -183,24 +146,6 @@ export default function GamePlayPage() {
 
             <div className="bg-card rounded-xl border border-border p-4">
               <p className="text-sm text-muted-foreground leading-relaxed">{game.description}</p>
-              <div className="flex items-center gap-3 mt-3">
-                <a
-                  href={game.repo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" /> View Source
-                </a>
-                <a
-                  href={game.download}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
-                >
-                  <Download className="w-3.5 h-3.5" /> Download ZIP
-                </a>
-              </div>
             </div>
           </div>
         </div>
