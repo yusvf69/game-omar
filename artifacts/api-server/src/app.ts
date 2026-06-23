@@ -33,4 +33,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/games", express.static(path.join(__dirname, "../../gaming-os/public/games")));
 app.use("/api", router);
 
+app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  logger.error({ err }, "Unhandled error");
+  res.status(500).json({
+    error: err instanceof Error ? err.message : "Internal server error",
+    ...(process.env.NODE_ENV === "development" ? { stack: err instanceof Error ? err.stack : undefined } : {}),
+  });
+});
+
 export default app;
